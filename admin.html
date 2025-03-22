@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Blog Admin</title>
+    <style>
+        :root {
+            --bg-color: #f6f8fa;
+            --card-bg: #ffffff;
+            --text-color: #24292e;
+            --primary-color: #0366d6;
+            --border-color: #e1e4e8;
+            --success-color: #2ea44f;
+            --error-color: #cb2431;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            border-radius: 6px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            border: 1px solid var(--border-color);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--text-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: var(--card-bg);
+        }
+
+        textarea {
+            min-height: 300px;
+            font-family: monospace;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #0256b0;
+        }
+
+        .markdown-help {
+            font-size: 14px;
+            color: #586069;
+            margin-top: 5px;
+        }
+
+        .markdown-tips {
+            background-color: #f8f9fa;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .markdown-tips code {
+            background-color: #edf0f2;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+
+        .preview-button {
+            background-color: #6c757d;
+            margin-bottom: 15px;
+        }
+
+        .preview-container {
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: white;
+            display: none;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert-success {
+            background-color: #dcffe4;
+            border: 1px solid var(--success-color);
+            color: var(--success-color);
+        }
+
+        .alert-error {
+            background-color: #ffe0e0;
+            border: 1px solid var(--error-color);
+            color: var(--error-color);
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            input, textarea, select, button {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Crypto Blog Admin</h1>
+        
+        <div id="alert-success" class="alert alert-success">
+            Article published successfully!
+        </div>
+        
+        <div id="alert-error" class="alert alert-error">
+            Error publishing article. Please try again.
+        </div>
+        
+        <button type="button" id="preview-button" class="preview-button">Preview Article</button>
+        
+        <div id="preview-container" class="preview-container">
+            <h2 id="preview-title"></h2>
+            <div id="preview-content"></div>
+        </div>
+        
+        <form id="article-form">
+            <div class="form-group">
+                <label for="article-id">ID (optional)</label>
+                <input type="text" id="article-id" placeholder="Leave blank for auto-generated ID">
+            </div>
+            
+            <div class="form-group">
+                <label for="article-title">Title *</label>
+                <input type="text" id="article-title" placeholder="Enter article title" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="article-date">Date *</label>
+                <input type="date" id="article-date" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="article-author">Author *</label>
+                <input type="text" id="article-author" placeholder="Enter author name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="article-description">Description (SEO) *</label>
+                <textarea id="article-description" rows="2" placeholder="Enter a brief description (max 160 characters)" maxlength="160" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="article-tags">Tags (comma-separated) *</label>
+                <input type="text" id="article-tags" placeholder="e.g. bitcoin,blockchain,cryptocurrency" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="article-image">Featured Image URL *</label>
+                <input type="url" id="article-image" placeholder="https://example.com/image.jpg" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="article-keywords">SEO Keywords (comma-separated) *</label>
+                <input type="text" id="article-keywords" placeholder="e.g. bitcoin, crypto, blockchain technology" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="article-content">Content (Markdown) *</label>
+                <div class="markdown-help">
+                    <a href="#" id="toggle-tips">Show Markdown Tips</a>
+                </div>
+                <div class="markdown-tips" id="markdown-tips" style="display: none;">
+                    <p><strong>Markdown Formatting Tips:</strong></p>
+                    <ul>
+                        <li>Headings: <code># H1</code>, <code>## H2</code>, <code>### H3</code></li>
+                        <li>Bold: <code>**bold text**</code></li>
+                        <li>Italic: <code>*italic text*</code></li>
+                        <li>Link: <code>[link text](https://example.com)</code></li>
+                        <li>Image: <code>![alt text](https://example.com/image.jpg)</code></li>
+                        <li>List: <code>* item</code> or <code>1. item</code></li>
+                        <li>Code: <code>`code`</code> or <code>```code block```</code></li>
+                        <li>Quote: <code>> quote</code></li>
+                    </ul>
+                </div>
+                <textarea id="article-content" placeholder="Enter article content in Markdown format" required></textarea>
+            </div>
+            
+            <button type="submit" id="submit-button">Publish Article</button>
+        </form>
+    </div>
+
+    <script>
+        // Set today's date as default
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            
+            document.getElementById('article-date').value = `${yyyy}-${mm}-${dd}`;
+            
+            // Toggle markdown tips
+            document.getElementById('toggle-tips').addEventListener('click', function(e) {
+                e.preventDefault();
+                const tips = document.getElementById('markdown-tips');
+                if (tips.style.display === 'none') {
+                    tips.style.display = 'block';
+                    this.textContent = 'Hide Markdown Tips';
+                } else {
+                    tips.style.display = 'none';
+                    this.textContent = 'Show Markdown Tips';
+                }
+            });
+            
+            // Handle preview button
+            document.getElementById('preview-button').addEventListener('click', function() {
+                const title = document.getElementById('article-title').value;
+                const content = document.getElementById('article-content').value;
+                const previewContainer = document.getElementById('preview-container');
+                
+                if (!title || !content) {
+                    alert('Please enter a title and content to preview');
+                    return;
+                }
+                
+                document.getElementById('preview-title').textContent = title;
+                
+                // Basic Markdown parsing for preview (very simplified)
+                let parsedContent = content
+                    // Headers
+                    .replace(/^# (.*$)/gm, '<h1>$1</h1>')
+                    .replace(/^## (.*$)/gm, '<h2>$1</h2>')
+                    .replace(/^### (.*$)/gm, '<h3>$1</h3>')
+                    // Bold and italic
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                    // Links
+                    .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>')
+                    // Lists
+                    .replace(/^\* (.*$)/gm, '<li>$1</li>')
+                    // Code
+                    .replace(/`(.*?)`/g, '<code>$1</code>')
+                    // Line breaks
+                    .replace(/\n/g, '<br>');
+                
+                document.getElementById('preview-content').innerHTML = parsedContent;
+                previewContainer.style.display = 'block';
+                
+                // Scroll to preview
+                previewContainer.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Handle form submission
+            document.getElementById('article-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const submitButton = document.getElementById('submit-button');
+                submitButton.disabled = true;
+                submitButton.textContent = 'Publishing...';
+                
+                // Get form values
+                const id = document.getElementById('article-id').value;
+                const title = document.getElementById('article-title').value;
+                const date = document.getElementById('article-date').value;
+                const author = document.getElementById('article-author').value;
+                const description = document.getElementById('article-description').value;
+                const tags = document.getElementById('article-tags').value;
+                const image = document.getElementById('article-image').value;
+                const keywords = document.getElementById('article-keywords').value;
+                const content = document.getElementById('article-content').value;
+                
+                // Prepare data for submission
+                const articleData = {
+                    id,
+                    title,
+                    date,
+                    author,
+                    description,
+                    tags,
+                    image,
+                    keywords,
+                    content
+                };
+                
+                // Send data to Google Apps Script Web App
+                fetch('https://script.google.com/macros/s/AKfycbwAXnLW9AnBn3c-dJtWunc284JxqnPRTlTM3ok82XbHEx9IkPK-PT2jrOflinN1L59_JA/exec', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(articleData),
+                    redirect: 'follow',
+                    mode: 'cors'
+                })
+                .then(response => {
+                    // Google Apps Script returns a redirect, so we handle that differently
+                    if (response.redirected) {
+                        // Success - Google Apps Script returns redirect after successful operation
+                        // Show success message
+                        document.getElementById('alert-success').style.display = 'block';
+                        document.getElementById('alert-error').style.display = 'none';
+                        
+                        // Reset form
+                        document.getElementById('article-form').reset();
+                        
+                        // Reset date to today
+                        document.getElementById('article-date').value = `${yyyy}-${mm}-${dd}`;
+                        
+                        // Hide preview
+                        document.getElementById('preview-container').style.display = 'none';
+                        
+                        // Scroll to top
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        return { success: true };
+                    } else if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data && data.success) {
+                        // Already handled in the redirect case
+                        return;
+                    }
+                    
+                    // Show success message
+                    document.getElementById('alert-success').style.display = 'block';
+                    document.getElementById('alert-error').style.display = 'none';
+                    
+                    // Reset form
+                    document.getElementById('article-form').reset();
+                    
+                    // Reset date to today
+                    document.getElementById('article-date').value = `${yyyy}-${mm}-${dd}`;
+                    
+                    // Hide preview
+                    document.getElementById('preview-container').style.display = 'none';
+                    
+                    // Scroll to top
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                })
+                .catch(error => {
+                    console.error('Error publishing article:', error);
+                    
+                    // Show error message
+                    document.getElementById('alert-error').style.display = 'block';
+                    document.getElementById('alert-success').style.display = 'none';
+                    document.getElementById('alert-error').textContent = 'Error publishing article: ' + error.message;
+                })
+                .finally(() => {
+                    // Re-enable submit button
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Publish Article';
+                });
+            });
+        });
+    </script>
+</body>
+</html> 
