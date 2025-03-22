@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+   <url>
+      <loc>https://cryptotechno.github.io/cryptoblog/</loc>
+      <lastmod>2023-07-01</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>1.0</priority>
+   </url>
+   <url>
+      <loc>https://cryptotechno.github.io/cryptoblog/?article=bitcoin-the-future-of-money</loc>
+      <lastmod>2023-05-15</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://cryptotechno.github.io/cryptoblog/?article=understanding-ethereum-and-smart-contracts</loc>
+      <lastmod>2023-06-22</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://cryptotechno.github.io/cryptoblog/?article=nfts-digital-ownership-revolution-in-the-crypto-space</loc>
+      <lastmod>2023-07-10</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+</urlset> 
